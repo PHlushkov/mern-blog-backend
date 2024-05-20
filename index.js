@@ -13,12 +13,8 @@ import { handleValidationErrors, checkAuth } from "./utils/index.js";
 import { UserController, PostController } from "./controllers/index.js";
 
 mongoose
-  .connect(
-    "mongodb+srv://admin:a72DmJIP@cluster0.ukkb5oq.mongodb.net/blog?retryWrites=true&w=majority&appName=Cluster0" // с помощью mongoose подключаемся к переданной ссылке, указываем: admin:a72DmJIP
-  )
-  .then(() => {
-    console.log("DB OK"); // проверяем удалось ли подключиться
-  })
+  .connect(process.env.MONGODB_URL)
+  .then(() => console.log("DB OK"))
   .catch((err) => console.log("DB Error:" + err)); // если ошибка, будем оповещать об этом.
 
 const app = express(); // создание экспресс приложения, вся логика хранится в переменной app
@@ -87,7 +83,7 @@ app.patch(
   PostController.update
 );
 
-app.listen(5454, (error) => {
+app.listen(process.env.PORT || 5454, (error) => {
   // запуск приложения, 5454 - это порт, второй параметр это функция( необязательная) - в который мы описываем, запустился ли сервер
   if (error) {
     return console.log(error);
